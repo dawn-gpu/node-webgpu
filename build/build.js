@@ -32,6 +32,7 @@ async function buildDawnNode() {
       ...addElemIf(!isWin, '-GNinja'),
       '-DDAWN_BUILD_NODE_BINDINGS=1',
       '-DDAWN_USE_X11=OFF',
+      '-DCMAKE_BUILD_TYPE=Release',
       ...addElemIf(isWin, '-DCMAKE_SYSTEM_VERSION=10.0.26100.0'),
       ...addElemIf(isMac, '-DCMAKE_OSX_SYSROOT=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk'),
     ]);

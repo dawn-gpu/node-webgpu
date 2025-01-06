@@ -1,0 +1,16 @@
+{
+  "name": "example",
+  "version": "1.0.0",
+  "description": "example using node-webgpu",
+  "main": "example.js",
+  "type": "module",
+  "scripts": {
+    "start": "node example.js"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "node-webgpu": "^0.0.6",
+    "pngjs": "^7.0.0"
+  }
+}
