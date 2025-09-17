@@ -37,7 +37,7 @@ jobs:
           }
         - {
             name: "macOS Intel?",
-            os: macos-13,
+            os: macos-latest-large,
             artifact: darwin-x64,
           }
 
