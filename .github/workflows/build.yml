@@ -26,7 +26,7 @@ jobs:
             artifact: win32-x64,
           }
         - {
-            name: "Ubuntu_Latest_GCC",
+            name: "Ubuntu_22_GCC",
             os: ubuntu-22.04,
             artifact: linux-x64,
           }
