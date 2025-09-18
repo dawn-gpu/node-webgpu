@@ -80,7 +80,7 @@ jobs:
         if: startsWith(matrix.config.os, 'windows')
         uses: GuillaumeFalourd/setup-windows10-sdk-action@v2
         with:
-          s dk-version: 26100
+          sdk-version: 26100
 
       - name: Install dependencies on ubuntu
         if: startsWith(matrix.config.name, 'Ubuntu')
