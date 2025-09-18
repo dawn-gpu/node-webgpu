@@ -10,6 +10,7 @@ const kDepotToolsPath = path.join(kCwd, 'third_party', 'depot_tools');
 const kDawnPath = `${kCwd}/third_party/dawn`;
 const kOutDir = 'out/cmake-release';
 const kBuildPath = `${kDawnPath}/${kOutDir}`
+const kConfig = process.env.CMAKE_BUILD_TYPE ?? 'Release';
 
 const isMac = process.platform === 'darwin';
 const isWin = process.platform === 'win32';
@@ -31,7 +32,7 @@ async function compile() {
   await processThenRestoreCWD(async () => {
     process.chdir(kBuildPath);
     if (isWin) {
-      await execute('cmake', ['--build', '.', '--target', 'dawn_node'])
+      await execute('cmake', ['--build', '.', '--target', 'dawn_node', '--config', kConfig]);
     } else {
       await execute('ninja', ['dawn.node']);
     }
@@ -56,7 +57,7 @@ async function createProject() {
       ...addElemIf(!isWin, '-GNinja'),
       '-DDAWN_BUILD_NODE_BINDINGS=1',
       '-DDAWN_USE_X11=OFF',
-      `-DCMAKE_BUILD_TYPE=${process.env.CMAKE_BUILD_TYPE ?? 'Release'}`,
+      `-DCMAKE_BUILD_TYPE=${kConfig}`,
       ...addElemIf(isWin, '-DCMAKE_SYSTEM_VERSION=10.0.26100.0'),
       ...addElemIf(isMac, '-DCMAKE_OSX_SYSROOT=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk'),
     ]);
@@ -64,7 +65,7 @@ async function createProject() {
 }
 
 async function copyResult(filepath, target) {
-  const srcFilename = path.join(...[filepath, ...addElemIf(isWin, 'Debug'), 'dawn.node']);
+  const srcFilename = path.join(...[filepath, ...addElemIf(isWin, 'Release'), 'dawn.node']);
   const dstFilename = path.join('dist', `${target}.dawn.node`);
   fs.mkdirSync(path.dirname(dstFilename), {recursive: true});
   fs.copyFileSync(srcFilename, dstFilename);
