@@ -8,6 +8,7 @@
   "scripts": {
     "build": "node build/build.js",
     "compile": "node build/build.js --compile-only",
+    "cts": "node build/run-cts.js",
     "test": "node test/test.js",
     "update": "node build/update.js"
   },

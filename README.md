@@ -142,14 +142,22 @@ Bugs related to dawn, WebGPU should be filed in the in the
 
 ```
 npm run build
-cd third_party/dawn/third_party/webgpu-cts
-npm ci
-cd ../..
-cp third_party/webgpu-cts/package.json ..
-./tools/run run-cts --bin=out/cmake-release 'webgpu:*'
+npm run cts
 ```
 
-Note: this is no different than running the CTS in dawn itself.
+You can pass a query an optional cts query. For example
+
+```
+npm run cts 'webgpu:shader,execution,expression,call,builtin,textureDimensions:*'
+```
+
+You can also pass the path to the CTS, for example if you want to run your own tests
+
+```
+npm run cts --cts=/Users/me/src/cts
+```
+
+Note: this is no different than running the CTS in dawn itself. 
 
 ## Updating
 
