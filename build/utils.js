@@ -11,15 +11,23 @@ export function exists(filename) {
   }
 }
 
+export function prependPath(filepath) {
+  process.env.PATH = `${filepath}${path.delimiter}${process.env.PATH}`;
+}
+
+export function appendPath(filepath) {
+  process.env.PATH = `${process.env.PATH}${path.delimiter}${filepath}`;
+}
+
 export function prependPathIfItExists(filepath) {
   if (exists(filepath)) {
-    process.env.PATH = `${filepath}${path.delimiter}${process.env.PATH}`;
+    prependPath(filepath);
   }
 }
 
 export function appendPathIfItExists(filepath) {
   if (exists(filepath)) {
-    process.env.PATH = `${process.env.PATH}${path.delimiter}${filepath}`;
+    appendPath(filepath);
   }
 }
 
@@ -57,4 +65,13 @@ export function parseArgs({options, args}) {
     process.exit(1);
   }
   return { values, positionals };
+}
+
+export async function processThenRestoreCWD(fn) {
+  const cwd = process.cwd(); 
+  try {
+    await fn();
+  } finally {
+    process.chdir(cwd);
+  }
 }

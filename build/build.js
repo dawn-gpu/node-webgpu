@@ -2,31 +2,27 @@ import path from 'node:path';
 import fs from 'node:fs';
 
 import {execute} from './execute.js';
-import {addElemIf, appendPathIfItExists, exists, prependPathIfItExists} from './utils.js';
-
-//const __dirname = dirname(fileURLToPath(import.meta.url));
-const kCwd = process.cwd();
-const kDepotToolsPath = path.join(kCwd, 'third_party', 'depot_tools');
-const kDawnPath = `${kCwd}/third_party/dawn`;
-const kOutDir = 'out/cmake-release';
-const kBuildPath = `${kDawnPath}/${kOutDir}`
-const kConfig = process.env.CMAKE_BUILD_TYPE ?? 'Release';
-
-const isMac = process.platform === 'darwin';
-const isWin = process.platform === 'win32';
+import {
+  addElemIf,
+  appendPath,
+  appendPathIfItExists,
+  exists,
+  prependPathIfItExists,
+  processThenRestoreCWD,
+} from './utils.js';
+import {
+  kDepotToolsPath,
+  kDawnPath,
+  kBuildPath,
+  kConfig,
+  isMac,
+  isWin,
+} from './constants.js';
 
 prependPathIfItExists(kDepotToolsPath);
 appendPathIfItExists('/Applications/CMake.app/Contents/bin');
 appendPathIfItExists('C:\\Program Files\\CMake\\bin');
-
-async function processThenRestoreCWD(fn) {
-  const cwd = process.cwd(); 
-  try {
-    await fn();
-  } finally {
-    process.chdir(cwd);
-  }
-}
+appendPath(`${kDawnPath}/third_party/ninja`);
 
 async function compile() {
   await processThenRestoreCWD(async () => {
@@ -46,11 +42,11 @@ async function createProject() {
     fs.copyFileSync('scripts/standalone-with-node.gclient', '.gclient');
     await execute('gclient', ['metrics', '--opt-out']);
     await execute('gclient', ['sync']);
-    if (exists(kOutDir)) {
-      fs.rmSync(kOutDir, {recursive: true});
+    if (exists(kBuildPath)) {
+      fs.rmSync(kBuildPath, {recursive: true});
     }
-    fs.mkdirSync(kOutDir, {recursive: true});
-    process.chdir(kOutDir);
+    fs.mkdirSync(kBuildPath, {recursive: true});
+    process.chdir(kBuildPath);
 
     await execute('cmake', [
       kDawnPath,
