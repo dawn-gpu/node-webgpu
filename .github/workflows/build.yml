@@ -33,12 +33,7 @@ jobs:
         - {
             name: "macOS Latest Clang",
             os: macos-latest,
-            artifact: darwin-arm64,
-          }
-        - {
-            name: "macOS Intel?",
-            os: macos-13,
-            artifact: darwin-x64,
+            artifact: darwin-universal,
           }
 
     steps:
