@@ -1,4 +1,5 @@
-import { assert } from 'chai';
+import { describe, it } from 'node:test';
+import { strict as assert } from 'node:assert';
 import DEBUG from 'debug';
 
 const debug = DEBUG('reference-count-tests');
@@ -14,10 +15,10 @@ async function waitForGC(ref, label) {
   debug(label, 'was GCed');
 }
 
-describe('reference count tests', () => {
+await describe('reference count tests', async () => {
 
-  it('correctly handles GC with device.features', async function() {
-    this.timeout(20000);
+  await it('correctly handles GC with device.features', async function() {
+    //this.timeout(20000);
     const adapter = await navigator.gpu.requestAdapter();
 
     const [iterWeakRef, featuresWeakRef] = await (async () => {

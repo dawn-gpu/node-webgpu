@@ -33,10 +33,6 @@
     "index.js",
     "types.d.ts"
   ],
-  "devDependencies": {
-    "chai": "^5.2.0",
-    "mocha": "^11.0.1"
-  },
   "dependencies": {
     "@webgpu/types": "^0.1.65",
     "debug": "^4.4.0"
