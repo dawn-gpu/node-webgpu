@@ -38,6 +38,7 @@ async function compile() {
 async function createProject() {
   await processThenRestoreCWD(async () => {
     process.env.DEPOT_TOOLS_WIN_TOOLCHAIN = '0'
+    //process.env.DEPOT_TOOLS_UPDATE = '0'
     process.chdir(kDawnPath);
     fs.copyFileSync('scripts/standalone-with-node.gclient', '.gclient');
     await execute('gclient', ['metrics', '--opt-out']);
@@ -54,6 +55,7 @@ async function createProject() {
       '-DDAWN_BUILD_NODE_BINDINGS=1',
       '-DDAWN_USE_X11=OFF',
       `-DCMAKE_BUILD_TYPE=${kConfig}`,
+      ...addElemIf(isMac, '-DCMAKE_OSX_ARCHITECTURES="x86_64;arm64"'),
       ...addElemIf(isWin, '-DCMAKE_SYSTEM_VERSION=10.0.26100.0'),
       ...addElemIf(isMac, '-DCMAKE_OSX_SYSROOT=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk'),
     ]);
@@ -71,7 +73,8 @@ async function copyResult(filepath, target) {
 async function main() {
   const compileOnly = process.argv[2] === '--compile-only';
   try {
-    const target = `${process.platform}-${process.arch}`;
+    const arch = isMac ? 'universal' : process.arch;
+    const target = `${process.platform}-${arch}`;
     console.log('building for:', target);
     if (!compileOnly) {
       await execute('git', ['submodule', 'update', '--init']);
