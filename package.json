@@ -29,6 +29,7 @@
   "homepage": "https://github.com/dawn-gpu/node-webgpu#readme",
   "files": [
     "dist/**/*",
+    "build/**/*",
     "index.js",
     "types.d.ts"
   ],
