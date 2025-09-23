@@ -35,10 +35,10 @@
   ],
   "devDependencies": {
     "chai": "^5.2.0",
-    "debug": "^4.4.0",
     "mocha": "^11.0.1"
   },
   "dependencies": {
-    "@webgpu/types": "^0.1.61"
+    "@webgpu/types": "^0.1.61",
+    "debug": "^4.4.0"
   }
 }
