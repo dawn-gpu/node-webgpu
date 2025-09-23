@@ -26,7 +26,7 @@ async function main() {
     // The user has already indicated they trust this by installing it,
     // This executable can not do anything a JavaScript node script couldn't also do.
     await execute('xattr', ['-d', attribute, dawnNode]);
-    console.log(`removed attribute: ${attribute}`);
+    debug(`removed attribute: ${attribute}`);
   }
 }
 
