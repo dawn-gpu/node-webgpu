@@ -1,4 +1,4 @@
-import { isWin } from '../build/constants.js';
+import { isMac, isWin } from '../build/constants.js';
 
 Promise.withResolvers = Promise.withResolvers ?? function() {
   const o = {};
