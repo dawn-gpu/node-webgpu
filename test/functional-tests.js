@@ -8,7 +8,5 @@ Promise.withResolvers = Promise.withResolvers ?? function() {
   return o;
 };
 
-if (isWin || isMac) {
-  await import('./tests/basic-tests.js');
-  //await import('./tests/reference-count-tests.js');
-}
+await import('./tests/basic-tests.js');
+//await import('./tests/reference-count-tests.js');
