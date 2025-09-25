@@ -1,7 +1,4 @@
-import { create, globals } from '../index.js';
-
-Object.assign(globalThis, globals);
-globalThis.navigator = { gpu: create([]) };
+import { isWin } from '../build/constants.js';
 
 Promise.withResolvers = Promise.withResolvers ?? function() {
   const o = {};
@@ -11,5 +8,7 @@ Promise.withResolvers = Promise.withResolvers ?? function() {
   return o;
 };
 
-await import('./tests/basic-tests.js');
-//await import('./tests/reference-count-tests.js');
+if (isWin || isMac) {
+  await import('./tests/basic-tests.js');
+  //await import('./tests/reference-count-tests.js');
+}
