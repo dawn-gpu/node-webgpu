@@ -98,6 +98,13 @@ jobs:
           echo "${{ github.event_name }}"
           npm run build
 
+      - name: Test
+        shell: bash
+        env:
+          WEBGPU_USE_CI_AVAILABLE_RENDERER: "1"
+        run: |
+          npm test
+
       - name: Upload Artifact ⬆️
         uses: actions/upload-artifact@v4
         with:
