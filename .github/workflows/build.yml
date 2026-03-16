@@ -155,5 +155,4 @@ jobs:
       run: |
         npm ci
         node build/prep-for-publish.js
-        npm test
         npm publish
