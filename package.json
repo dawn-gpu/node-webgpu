@@ -34,7 +34,7 @@
     "types.d.ts"
   ],
   "dependencies": {
-    "@webgpu/types": "^0.1.65",
+    "@webgpu/types": "^0.1.69",
     "debug": "^4.4.0"
   }
 }
