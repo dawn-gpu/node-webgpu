@@ -36,5 +36,8 @@
   "dependencies": {
     "@webgpu/types": "^0.1.69",
     "debug": "^4.4.0"
+  },
+  "devDependencies": {
+    "@types/node": "^25.5.0"
   }
 }
