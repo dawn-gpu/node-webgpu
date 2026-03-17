@@ -42,7 +42,8 @@ async function createProject() {
     process.chdir(kDawnPath);
     fs.copyFileSync('scripts/standalone-with-node.gclient', '.gclient');
     await execute('gclient', ['metrics', '--opt-out']);
-    await execute('gclient', ['sync', '-D']);
+    // add -D only if gclieny sync was run before.
+    await execute('gclient', ['sync', ...addElemIf(exists('.gclient_entries'), '-D')]);
     if (exists(kBuildPath)) {
       fs.rmSync(kBuildPath, {recursive: true});
     }
