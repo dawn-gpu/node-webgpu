@@ -13,7 +13,7 @@ npm version patch # or minor or major
 git push --tag upstream main
 ```
 
-That should build all 3 platforms and then publish a new package
+That should build all 4 platforms and then publish a new package
 on npm. At the time of this writing that generally takes 20-30 minutes.
 
 ## Notes

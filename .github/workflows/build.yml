@@ -19,7 +19,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        config: 
+        config:
         - {
             name: "Windows Latest MSVC",
             os: windows-latest,
@@ -29,6 +29,11 @@ jobs:
             name: "Ubuntu_22_GCC",
             os: ubuntu-22.04,
             artifact: linux-x64,
+          }
+        - {
+            name: "Ubuntu_24_ARM64",
+            os: ubuntu-24.04-arm,
+            artifact: linux-arm64,
           }
         - {
             name: "macOS Latest Clang",
@@ -90,7 +95,7 @@ jobs:
         run: |
           brew install cmake
           cmake --version
-          
+
       - name: Build
         shell: bash
         run: |
