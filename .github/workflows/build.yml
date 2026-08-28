@@ -26,6 +26,11 @@ jobs:
             artifact: win32-x64,
           }
         - {
+            name: "Windows 11 ARM64",
+            os: windows-11-arm,
+            artifact: win32-arm64,
+          }
+        - {
             name: "Ubuntu_24_GCC",
             os: ubuntu-24.04,
             artifact: linux-x64,
@@ -64,8 +69,10 @@ jobs:
           echo github.event_name: ${{ github.event_name }}
           echo github.ref: ${{ github.ref }}
 
+      # x64 only. The arm64 image already ships node, cmake and ninja, and
+      # choco would pull x64 builds of them onto an arm64 runner.
       - name: Install dependencies on windows
-        if: startsWith(matrix.config.os, 'windows')
+        if: matrix.config.artifact == 'win32-x64'
         run: |
           choco install node cmake
           node --version
@@ -76,8 +83,10 @@ jobs:
         if: startsWith(matrix.config.os, 'windows')
         uses: microsoft/setup-msbuild@v2
 
+      # x64 only. The arm64 image already has SDK 10.0.26100.0 installed, and
+      # this action installs an x64 SDK.
       - name: Add setup Windows SDK
-        if: startsWith(matrix.config.os, 'windows')
+        if: matrix.config.artifact == 'win32-x64'
         uses: GuillaumeFalourd/setup-windows10-sdk-action@v2
         with:
           sdk-version: 26100
@@ -111,11 +120,12 @@ jobs:
           npm test
 
       # Named for the platform-arch alone so the package job can download
-      # artifacts straight into dist/<platform-arch>/ without merging.
+      # artifacts straight into dist/<platform-arch>/ without merging. Uploads
+      # the whole directory so win32 carries its d3dcompiler_47.dll along.
       - name: Upload Artifact ⬆️
         uses: actions/upload-artifact@v4
         with:
-          path: ./dist/${{ matrix.config.artifact }}/dawn.node
+          path: ./dist/${{ matrix.config.artifact }}/*
           name: ${{ matrix.config.artifact }}
           overwrite: true
 
