@@ -110,18 +110,27 @@ jobs:
         run: |
           npm test
 
+      # Named for the platform-arch alone so the package job can download
+      # artifacts straight into dist/<platform-arch>/ without merging.
       - name: Upload Artifact ⬆️
         uses: actions/upload-artifact@v4
         with:
-          path: ./dist/*.dawn.node
-          name: ${{ matrix.config.artifact }}.dawn.node
+          path: ./dist/${{ matrix.config.artifact }}/dawn.node
+          name: ${{ matrix.config.artifact }}
           overwrite: true
+
+      # Release assets are a flat namespace, so give each one back its
+      # platform-arch prefix rather than uploading four files named dawn.node.
+      - name: Stage release asset
+        if: startsWith(github.ref, 'refs/tags/')
+        shell: bash
+        run: cp dist/${{ matrix.config.artifact }}/dawn.node ${{ matrix.config.artifact }}.dawn.node
 
       - name: Release
         uses: softprops/action-gh-release@v2
         if: startsWith(github.ref, 'refs/tags/')
         with:
-          files: dist/*.dawn.node
+          files: ${{ matrix.config.artifact }}.dawn.node
 
   package:
     needs: build
@@ -149,11 +158,12 @@ jobs:
         echo github.ref: ${{ github.ref }}
         echo github.ref_type: ${{ github.ref_type }}
 
+    # No merge-multiple: each artifact lands in dist/<its name>/, which is
+    # exactly the per-platform-arch layout index.js resolves against.
     - name: Download artifacts
       uses: actions/download-artifact@v4
       with:
         path: dist
-        merge-multiple: true
 
     - name: Build and Publish
       shell: bash

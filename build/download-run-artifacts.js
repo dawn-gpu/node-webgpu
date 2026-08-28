@@ -108,9 +108,11 @@ const data = await github.getRunArtifacts({
 });
 const filenames = await Promise.all(
   data.artifacts
-    .filter(({name}) => name?.endsWith('.node'))
-    .map(({id}) => {
+    // Artifacts are named for the platform-arch they were built for, and each
+    // unpacks into the dist directory of that same name.
+    .filter(({name}) => /^(darwin|linux|win32)-/.test(name ?? ''))
+    .map(({id, name}) => {
       const url = `https://github.com/${owner}/${repo}/actions/runs/${args.run_id}/artifacts/${id}`;
-      return downloadFileFromZip(url, 'dist');
+      return downloadFileFromZip(url, path.join('dist', name));
     })
 );

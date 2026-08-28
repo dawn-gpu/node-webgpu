@@ -6,6 +6,8 @@ export const isMac = process.platform === 'darwin';
     
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const arch = isMac ? 'universal' : process.arch;
-const dawnNodePath = join(__dirname, 'dist', `${process.platform}-${arch}.dawn.node`);
+// One directory per platform-arch so each build can sit next to its own
+// runtime deps (win32 needs its matching d3dcompiler_47.dll beside it).
+const dawnNodePath = join(__dirname, 'dist', `${process.platform}-${arch}`, 'dawn.node');
 const { create, globals } = require(dawnNodePath);
 export { create, globals }

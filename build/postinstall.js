@@ -10,7 +10,7 @@ const debug = DEBUG('postinstall');
 
 async function main() {
   if (isMac) {
-    const dawnNode = 'dist/darwin-universal.dawn.node';
+    const dawnNode = 'dist/darwin-universal/dawn.node';
     const attribute = 'com.apple.quarantine'
     if (!exists(dawnNode)) {
       debug(`${dawnNode} does not exist`);

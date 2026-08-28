@@ -77,7 +77,7 @@ async function createProject() {
 
 async function copyResult(filepath, target) {
   const srcFilename = path.join(...[filepath, ...addElemIf(isWin, kConfig), 'dawn.node']);
-  const dstFilename = path.join('dist', `${target}.dawn.node`);
+  const dstFilename = path.join('dist', target, 'dawn.node');
   fs.mkdirSync(path.dirname(dstFilename), {recursive: true});
   fs.copyFileSync(srcFilename, dstFilename);
   return dstFilename;
