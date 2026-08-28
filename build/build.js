@@ -17,6 +17,7 @@ import {
   kConfig,
   isMac,
   isWin,
+  isLinux,
 } from './constants.js';
 
 prependPathIfItExists(kDepotToolsPath);
@@ -59,6 +60,11 @@ async function createProject() {
       // wayland backend, which needs wayland-scanner. dawn.node never opens a
       // window, so turn it off rather than requiring the tool on every runner.
       '-DDAWN_USE_WAYLAND=OFF',
+      // dawn's module check only gates clang on clang-scan-deps, so gcc 13
+      // passes it but then cmake can't scan the import graph (gcc only emits
+      // p1689 deps from 14 on) and the generate step fails. dawn.node doesn't
+      // use the C++20 module interface, so seed the check as off.
+      ...addElemIf(isLinux, '-DDAWN_SUPPORTS_CXX_MODULES=OFF'),
       `-DCMAKE_BUILD_TYPE=${kConfig}`,
       '-DCMAKE_CXX_VISIBILITY_PRESET=hidden',
       '-DCMAKE_VISIBILITY_INLINES_HIDDEN=1',
