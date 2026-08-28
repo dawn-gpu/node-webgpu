@@ -55,6 +55,10 @@ async function createProject() {
       ...addElemIf(!isWin, '-GNinja'),
       '-DDAWN_BUILD_NODE_BINDINGS=1',
       '-DDAWN_USE_X11=OFF',
+      // dawn defaults both of these ON for linux, which makes it build GLFW's
+      // wayland backend, which needs wayland-scanner. dawn.node never opens a
+      // window, so turn it off rather than requiring the tool on every runner.
+      '-DDAWN_USE_WAYLAND=OFF',
       `-DCMAKE_BUILD_TYPE=${kConfig}`,
       '-DCMAKE_CXX_VISIBILITY_PRESET=hidden',
       '-DCMAKE_VISIBILITY_INLINES_HIDDEN=1',
