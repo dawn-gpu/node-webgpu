@@ -22,6 +22,11 @@ async function main() {
     await execute('gclient', ['sync', '-D']);
     process.chdir(cwd);
 
+    // Stage the new submodule revisions. Otherwise the `git submodule update --init`
+    // in build.js rewinds them to the revisions still recorded in the index and
+    // you silently build the old dawn.
+    await execute('git', ['add', 'third_party/dawn', 'third_party/depot_tools']);
+
     await execute('npm', ['install', '--save', '@webgpu/types@latest']);
 
    } catch (e) {
