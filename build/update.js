@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 import {execute} from './execute.js';
+import {reportToolVersions} from './check-tool-versions.js';
 import {prependPathIfItExists} from './utils.js';
 
 const cwd = process.cwd(); 
@@ -28,6 +29,10 @@ async function main() {
     await execute('git', ['add', 'third_party/dawn', 'third_party/depot_tools']);
 
     await execute('npm', ['install', '--save', '@webgpu/types@latest']);
+
+    // Reported, not enforced: the update itself succeeded either way, and
+    // whether a bumped floor needs a workflow edit is a judgement call.
+    reportToolVersions();
 
    } catch (e) {
     console.error(e);
