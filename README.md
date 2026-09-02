@@ -98,14 +98,14 @@ the object returned by `create`. As such, if you assign it to a global
 variable like this
 
 ```js
-globalThis.navigator = { gpu: create([]) };
+globalThis.navigator.gpu = create([]);
 ```
 
 node will not exit because it's still running GPU code in the background.
 You can fix that by removing the reference.
 
 ```js
-delete globalThis.navigator
+delete globalThis.navigator.gpu
 ```
 
 See: https://issues.chromium.org/issues/387965810
