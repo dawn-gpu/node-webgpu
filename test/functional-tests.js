@@ -9,5 +9,6 @@ Promise.withResolvers = Promise.withResolvers ?? function() {
 };
 
 await import('./tests/basic-tests.js');
+await import('./tests/device-destroy-tests.js');
 await import('./tests/worker-threads-tests.js');
 //await import('./tests/reference-count-tests.js');
