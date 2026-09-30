@@ -30,14 +30,17 @@ jobs:
             os: windows-11-arm,
             artifact: win32-arm64,
           }
+        # Build on the oldest supported Ubuntu so dawn.node loads there too.
+        # A 24.04 build needs glibc 2.38 and GLIBCXX_3.4.32, which 22.04
+        # (glibc 2.35, GLIBCXX_3.4.30) doesn't have.
         - {
-            name: "Ubuntu_24_GCC",
-            os: ubuntu-24.04,
+            name: "Ubuntu_22_GCC",
+            os: ubuntu-22.04,
             artifact: linux-x64,
           }
         - {
-            name: "Ubuntu_24_ARM64",
-            os: ubuntu-24.04-arm,
+            name: "Ubuntu_22_ARM64",
+            os: ubuntu-22.04-arm,
             artifact: linux-arm64,
           }
         - {
