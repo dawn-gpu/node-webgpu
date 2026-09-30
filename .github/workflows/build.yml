@@ -124,7 +124,8 @@ jobs:
 
       # Named for the platform-arch alone so the package job can download
       # artifacts straight into dist/<platform-arch>/ without merging. Uploads
-      # the whole directory so win32 carries its d3dcompiler_47.dll along.
+      # the whole directory so win32 carries its d3dcompiler_47.dll and
+      # dxcompiler.dll along.
       - name: Upload Artifact ⬆️
         uses: actions/upload-artifact@v4
         with:

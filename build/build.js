@@ -65,6 +65,13 @@ async function createProject() {
       // p1689 deps from 14 on) and the generate step fails. dawn.node doesn't
       // use the C++20 module interface, so seed the check as off.
       ...addElemIf(isLinux, '-DDAWN_SUPPORTS_CXX_MODULES=OFF'),
+      // without built DXC, dawn forces d3d12 onto FXC, which was measured ~45x
+      // slower than DXC on a compute rasterizer and can hang the device
+      // (crbug.com/566251711). with it, dawn prefers DXC wherever the adapter
+      // supports shader model 6.0+. copyResult ships dxcompiler.dll alongside.
+      ...addElemIf(isWin, '-DDAWN_USE_BUILT_DXC=ON'),
+      // dawn otherwise keeps DXC's asserts in release builds, where they trap.
+      ...addElemIf(isWin, '-DDAWN_DXC_ENABLE_ASSERTS_IN_NDEBUG=OFF'),
       `-DCMAKE_BUILD_TYPE=${kConfig}`,
       '-DCMAKE_CXX_VISIBILITY_PRESET=hidden',
       '-DCMAKE_VISIBILITY_INLINES_HIDDEN=1',
@@ -80,6 +87,15 @@ async function copyResult(filepath, target) {
   const dstFilename = path.join('dist', target, 'dawn.node');
   fs.mkdirSync(path.dirname(dstFilename), {recursive: true});
   fs.copyFileSync(srcFilename, dstFilename);
+  if (isWin) {
+    // dawn loads dxcompiler.dll from beside dawn.node at runtime, so ship it
+    // there along with DXC's license notices.
+    const dxcPath = path.join(kDawnPath, 'third_party', 'directx-shader-compiler', 'src');
+    fs.copyFileSync(path.join(filepath, kConfig, 'dxcompiler.dll'), path.join('dist', target, 'dxcompiler.dll'));
+    for (const notice of ['LICENSE.TXT', 'ThirdPartyNotices.txt']) {
+      fs.copyFileSync(path.join(dxcPath, notice), path.join('dist', target, `dxcompiler-${notice}`));
+    }
+  }
   return dstFilename;
 }
 
